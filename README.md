@@ -148,10 +148,10 @@ uvicorn api.main:app --reload --port 8000
 ## 🧠 Key Technical Decisions
 
 ### Why RobustScaler over StandardScaler?
-Oil production data has heavy outliers — shutdown days produce 0 Sm³ while peak days hit 9,400+ Sm³. RobustScaler uses median and IQR, not mean and std, making it resilient to these extremes. StandardScaler's mean gets pulled by outliers, distorting the scaled representation of typical producing days.
+Oil production data has heavy outliers; shutdown days produce 0 Sm³ while peak days hit 9,400+ Sm³. RobustScaler uses median and IQR, not mean and std, making it resilient to these extremes. StandardScaler's mean gets pulled by outliers, distorting the scaled representation of typical producing days.
 
 ### Why detrend the LSTM target?
-Raw oil production is non-stationary — it has a multi-year declining trend that LSTMs struggle to extrapolate. By predicting `oil / 90d_rolling_mean` (a ratio centred around 1.0), the target becomes stationary. The LSTM learns short-term fluctuations around the trend, and the final prediction is `predicted_ratio × trend`. Without detrending, LSTM R² was negative. With it: R² = 0.845.
+Raw oil production is non-stationary; it has a multi-year declining trend that LSTMs struggle to extrapolate. By predicting `oil / 90d_rolling_mean` (a ratio centred around 1.0), the target becomes stationary. The LSTM learns short-term fluctuations around the trend, and the final prediction is `predicted_ratio × trend`. Without detrending, LSTM R² was negative. With it: R² = 0.845.
 
 ### Why does XGBoost beat LSTM here?
 XGBoost is the stronger choice for structured tabular time series with rich hand-crafted features (75 total). It captures non-linear interactions between lag features, pressure, GOR, and water cut directly. LSTMs typically win when temporal dependencies are the dominant signal and raw sequences matter more than feature engineering. With 27 engineered sequence features, the two approaches partially overlap — but XGBoost's tree splits make better use of the tabular structure.
