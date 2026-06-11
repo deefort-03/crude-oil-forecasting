@@ -187,7 +187,7 @@ A random train/test split on time series leaks future information. Walk-forward 
 
 ## 👤 Author
 
-**Fortune** — FLDC Cohort 6 · University of Ibadan  
+**Fortune Adeoye** 
 [GitHub](https://github.com/fortuneiyoha) · [LinkedIn](https://linkedin.com/in/fortuneiyoha)
 
 *Part of a 6-project data science portfolio.*
